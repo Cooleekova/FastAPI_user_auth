@@ -14,3 +14,7 @@ class UserList(BaseModel):
 class UserCreate(UserList):
     password : str = Field(..., example="********")
 
+
+class ResetPassword(BaseModel):
+    email: str = Field(..., example="example@example.com")
+

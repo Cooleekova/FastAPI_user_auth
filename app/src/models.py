@@ -15,17 +15,15 @@ users = Table(
 )
 
 
+codes = Table(
+    "codes", metadata,
+    Column("id", Integer, primary_key=True),
+    Column("email", String(50)),
+    Column("reset_code", String(100)),
+    Column("status", String(1)),
+    Column("expired_in", DateTime)
+)
 
  # Column("id", Integer, Sequence("user_id_seq"), primary_key=True),
 
-
-
-#class User(Base):
-    ##id = Column(Integer,primary_key=True,index=True)
-   # username = Column(String,unique=True,nullable=False)
-   # email = Column(String,nullable=False,unique=True,index=True)
-  #  hashed_password = Column(String,nullable=False)
-  #  is_active = Column(Boolean(),default=True)
-  #  is_superuser = Column(Boolean(),default=False)
-  #  jobs = relationship("Job",back_populates="owner")
     
