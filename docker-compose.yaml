@@ -5,7 +5,7 @@ services:
   db:
     image: "postgres:13.3"
     ports:
-      - "8088:5432" #"5432:5432"
+      - "5432:5432"
     environment:
       - POSTGRES_USER=${DOCKER_APP_DB_USERNAME}
       - POSTGRES_PASSWORD=${DOCKER_APP_DB_PASSWORD}
@@ -23,6 +23,6 @@ services:
       - DATABASE_PORT=5432
       - DATABASE_HOST=db
     ports:
-      - "8008:80"
+      - "8000:80"
     depends_on:
       - db
