@@ -1,0 +1,28 @@
+version: "3.7"
+
+services:
+
+  db:
+    image: "postgres:13.3"
+    ports:
+      - "8088:5432" #"5432:5432"
+    environment:
+      - POSTGRES_USER=${DOCKER_APP_DB_USERNAME}
+      - POSTGRES_PASSWORD=${DOCKER_APP_DB_PASSWORD}
+      - POSTGRES_DB=${DOCKER_APP_DB_DATABASE}
+      - PGDATA=/var/lib/postgresql/data/external
+    volumes:
+      - "${DOCKER_APP_DB_DATA_PATH}/:/var/lib/postgresql/data/external"
+
+  api:
+    image: "${DOCKER_APP_IMAGE_NAME}:${DOCKER_APP_IMAGE_VERSION}"
+    environment:
+      - DATABASE_NAME=${DOCKER_APP_DB_DATABASE}
+      - DATABASE_USERNAME=${DOCKER_APP_DB_USERNAME}
+      - DATABASE_PASSWORD=${DOCKER_APP_DB_PASSWORD}
+      - DATABASE_PORT=5432
+      - DATABASE_HOST=db
+    ports:
+      - "8008:80"
+    depends_on:
+      - db
