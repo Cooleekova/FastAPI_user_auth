@@ -1,20 +1,21 @@
 from pydantic import BaseModel, Field
 
 
-# class UserCreate(BaseModel):
-    # email: str = Field(..., example="example@example.com")
-    # password : str = Field(..., example="********")
-    # fullname: str = Field(..., example="Justin Biber")
-
-
 class UserList(BaseModel):
-    email: str
-    fullname: str
+    email: str = Field(..., example="example@example.com")
+    fullname: str = Field(..., example="Justin Biber")
+
 
 class UserCreate(UserList):
     password : str = Field(..., example="********")
 
 
-class ResetPassword(BaseModel):
+class ForgotPassword(BaseModel):
     email: str = Field(..., example="example@example.com")
+
+
+class ResetPassword(BaseModel):
+    reset_password_token: str
+    new_password: str
+    confirm_password: str
 

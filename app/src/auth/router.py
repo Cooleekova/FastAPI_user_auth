@@ -57,9 +57,9 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
         }
     }
 
-@router.post("/auth/reset-password")
-async def reset_password(request: schema.ResetPassword):
-    """ Endpoint for resetting user's password.
+@router.post("/auth/forgot-password")
+async def forgot_password(request: schema.ForgotPassword):
+    """ Endpoint for restoring forgotten password.
     Checks user existance,
     if there is a user with such an email in database,
     it forms reset_code and sends it directly to the provided email.
@@ -78,9 +78,37 @@ async def reset_password(request: schema.ResetPassword):
     message = f"""
         <h1>Hello, {request.email}!</h1>
         <p>Here is the link to reset your password: </p>
-        <a href="http://127.0.0.1:8000/user/reset-password?reset_password_token={reset_code}></a>
+        <a href="http://127.0.0.1:8000/user/forgot-password?reset_password_token={reset_code}">Reset my password</a>
     """
 
     await email_util.send_email(subject, recepient, message)
 
     return {"message": "Password reset code was sent. Check your email"}
+
+
+@router.patch("/auth/reset-password")
+async def reset_password(request: schema.ResetPassword):
+    """ Endpoint for setting new user's password instead of forgotten one.
+    User needs to provide unique reset password token and create a new password. """
+
+    # Token validation
+    reset_token = await crud.check_reset_password_token(request.reset_password_token)
+    if not reset_token:
+        raise HTTPException(status_code=404, detail='Reset password token has expired, please request a new one')
+
+    # Checking new password and confirm password values to match
+    if request.new_password != request.confirm_password:
+        raise HTTPException(status_code=404, detail='Password and Confirm password should match, please try again.')
+
+    # Saving new password in database
+    forgot_password_user = schema.ForgotPassword(**reset_token)
+    new_hashed_password = crypto_util.hash_password(request.new_password)
+    await crud.reset_password(new_hashed_password, forgot_password_user.email)
+
+    # Disabling used reset code
+    await crud.disable_reset_code(request.reset_password_token, forgot_password_user.email)
+
+    return {
+        "code": 200,
+        "message": "Password has been reset successfully."
+    }
