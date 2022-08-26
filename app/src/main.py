@@ -1,6 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 from starlette.middleware.cors import CORSMiddleware
 from auth import router as auth_router
+from exceptions.business import BusinessException
 
 
 #imports to check db connection begin >>>>>
@@ -46,7 +48,13 @@ async def get_time_service():
 #code to check db connection end <<<<<
 
 
-
+@app.exception_handler(BusinessException)
+async def business_exception_handler(request: Request, exc: BusinessException):
+    """Documentation: https://fastapi.tiangolo.com/tutorial/handling-errors/"""
+    return JSONResponse(
+        status_code=418,
+        content={"status_code": exc.status_code, "detail": exc.detail},
+    )
 
 
 app.include_router(auth_router.router, tags = ["Auth"])
