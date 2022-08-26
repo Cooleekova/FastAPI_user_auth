@@ -5,6 +5,7 @@ import uuid
 
 from auth import schema, crud
 from utils import crypto_util, jwt_util, constant_util, email_util
+from exceptions.business import BusinessException
 
 
 
@@ -19,7 +20,8 @@ async def register(user: schema.UserCreate):
     if there is no user with provided email, creates new user"""
     result = await crud.find_exist_user(user.email)
     if result:
-        raise HTTPException(status_code=404, detail="User already registered.")
+        #raise HTTPException(status_code=404, detail="User already registered.")
+        raise BusinessException(status_code=999, detail="User already registered.")
 
     user.password = crypto_util.hash_password(user.password)
     await crud.save_user(user)
