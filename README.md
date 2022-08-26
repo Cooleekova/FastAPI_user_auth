@@ -4,6 +4,7 @@ Information about registered users is stored in the database.
 
 Implemented endpoints: 
 - register a new user, 
+- login user,
 - forgot password, 
 - reset password
 
