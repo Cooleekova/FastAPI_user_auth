@@ -21,7 +21,7 @@ async def register(user: schema.UserCreate):
     result = await crud.find_exist_user(user.email)
     if result:
         #raise HTTPException(status_code=404, detail="User already registered.")
-        raise BusinessException(status_code=999, detail="User already registered.")
+        raise BusinessException(status_code=409, detail="User already registered.")
 
     user.password = crypto_util.hash_password(user.password)
     await crud.save_user(user)

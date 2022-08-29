@@ -52,7 +52,7 @@ async def get_time_service():
 async def business_exception_handler(request: Request, exc: BusinessException):
     """Documentation: https://fastapi.tiangolo.com/tutorial/handling-errors/"""
     return JSONResponse(
-        status_code=418,
+        status_code=exc.status_code,
         content={"status_code": exc.status_code, "detail": exc.detail},
     )
 
