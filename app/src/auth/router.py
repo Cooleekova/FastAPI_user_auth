@@ -33,7 +33,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     """ Endpoint for login.
     Checks user existance,
     if there is a user with provided username in database, 
-    it verufies the password and if provided password is correct, user logs in """
+    it verifies the password and if provided password is correct, user logs in """
     result = await crud.find_exist_user(form_data.username)
     if not result:
         raise HTTPException(status_code=404, detail="User not found.")
@@ -50,6 +50,8 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
         data = {"sub": form_data.username},
         expires_delta=access_token_expires
     )
+    print('****************************************************************')
+    print(access_token)
     return {
         "acess_token": access_token,
         "token_type": "bearer",
@@ -58,6 +60,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
             "fullname": user.fullname
         }
     }
+
 
 @router.post("/auth/forgot-password")
 async def forgot_password(request: schema.ForgotPassword):

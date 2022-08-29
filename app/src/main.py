@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from starlette.middleware.cors import CORSMiddleware
 from auth import router as auth_router
+from users import router as user_router
 from exceptions.business import BusinessException
 
 
@@ -13,7 +14,7 @@ from init_database import async_session
 def get_application() -> FastAPI:
     application = FastAPI(
         debug=False,
-        title='Betuple',
+        title='FastAPI',
         version='0.0.1',
     )
     origins = [
@@ -58,3 +59,4 @@ async def business_exception_handler(request: Request, exc: BusinessException):
 
 
 app.include_router(auth_router.router, tags = ["Auth"])
+app.include_router(user_router.router, tags = ["Users"])

@@ -1,9 +1,14 @@
 from pydantic import BaseModel, Field
+from typing import Optional
+from datetime import datetime
 
 
 class UserList(BaseModel):
+    id: int = None
     email: str = Field(..., example="example@example.com")
     fullname: str = Field(..., example="Justin Biber")
+    created_on: Optional[datetime] = None
+    status: str = None
 
 
 class UserCreate(UserList):
