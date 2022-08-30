@@ -29,6 +29,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"}
     )
+    print('*****************************************************************************************')
     print(token)
     try: 
         payload = jwt.decode(token, constant_util.SECRET_KEY, algorithms=[constant_util.ALGORITHM_HS256])
@@ -47,3 +48,9 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
 
     except (PyJWTError, ValidationError):
         raise credentials_exception
+
+
+def get_current_active_user(current_user: schema.UserList = Depends(get_current_user)):
+    if current_user.status != '1':
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Inactive user")
+    return current_user

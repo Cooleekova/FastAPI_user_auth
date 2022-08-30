@@ -53,8 +53,8 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     print('****************************************************************')
     print(access_token)
     return {
-        "acess_token": access_token,
-        "token_type": "bearer",
+        "access_token": access_token,
+        "token_type": "Bearer",
         "user_info": {
             "email": user.email,
             "fullname": user.fullname
