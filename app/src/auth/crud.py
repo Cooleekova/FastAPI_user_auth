@@ -13,6 +13,16 @@ async def find_exist_user(email: str):
             return result.fetchone()
 
 
+async def find_black_list_token(token: str):
+    """ Function takes user's JWT token as an argument 
+    and makes a query to the database table blacklist to check if provided token is in blacklist. """
+    async with async_session() as session:
+        async with session.begin():
+            query = "SELECT * FROM blacklist WHERE token=:token"
+            result = await session.execute(text(query), {'token': token})
+            return result.fetchone()
+
+
 async def save_user(user: schema.UserCreate):
     """ Function takes user's information 
     and makes insert query to database table "Users" creating new user with provided credentials. """

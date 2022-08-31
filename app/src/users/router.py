@@ -1,10 +1,10 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, status, File, UploadFile
 from auth import schema as auth_schema, crud as auth_crud
 from users import schema as user_schema, crud as user_crud
 from utils import jwt_util, crypto_util
 
 from exceptions.business import BusinessException
-
+import os
 
 
 router = APIRouter(
@@ -69,4 +69,46 @@ async def change_password(
     return {
         "status_code": status.HTTP_200_OK,
         "detail": "Password has been changed successfully."
+    }
+
+
+
+@router.get("/user/logout")
+async def logout(
+    token: str = Depends(jwt_util.get_user_token),
+    current_user: auth_schema.UserList = Depends(jwt_util.get_current_active_user)
+):
+
+    # Saving used token to blacklist
+    await user_crud.save_black_list_token(token, current_user)
+    return {
+        "status_code": status.HTTP_200_OK,
+        "detail": "User logged out successfully."
+    }
+
+
+@router.post("/user/upload-profile-image")
+async def upload_profile_image(
+    file: UploadFile = File(...),
+    current_user: auth_schema.UserList = Depends(jwt_util.get_current_active_user)
+):
+    cwd = os.getcwd()
+    path_image_dir = "upload_images/user/profile/" + str(current_user.id) + "/"
+    full_image_path = os.path.join(cwd, path_image_dir, file.filename)
+
+    # Create directory if does not exist
+    if not os.path.exists(path_image_dir):
+        os.makedirs(path_image_dir)
+
+    # Rename file to 'profile.png'
+    file_name = full_image_path.replace(file.filename, "profile.png")
+
+    # Write file
+    with open(file_name, 'wb+') as f:
+        f.write(file.file.read())
+        f.flush()
+        f.close()
+
+    return {
+        "profile_image": os.path.join(path_image_dir, "profile.png")
     }

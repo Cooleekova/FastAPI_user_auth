@@ -36,3 +36,14 @@ async def change_password(
         async with session.begin():
             query = "UPDATE users SET password=:password WHERE status='1' AND email=:email"
             return await session.execute(text(query), {"password": change_password_object.new_password, "email": current_user.email})
+
+
+async def save_black_list_token(
+    token: str,
+    current_user: auth_schema.UserList
+):
+    """ Function takes current user's JWT token and saves it to blacklist table in the database""" 
+    async with async_session() as session:
+        async with session.begin():
+            query = "INSERT INTO blacklist (token, email) VALUES (:token, :email)"
+            return await session.execute(text(query), {"token": token, "email": current_user.email})

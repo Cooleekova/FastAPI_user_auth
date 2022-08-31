@@ -22,6 +22,9 @@ oauth2_scheme = OAuth2PasswordBearer(
     tokenUrl="/api/v1/auth/login"
 )
 
+def get_user_token(token: str = Depends(oauth2_scheme)):
+    return token
+
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):
     credentials_exception = HTTPException(
@@ -29,18 +32,18 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"}
     )
-    print('*****************************************************************************************')
-    print(token)
     try: 
         payload = jwt.decode(token, constant_util.SECRET_KEY, algorithms=[constant_util.ALGORITHM_HS256])
-        print('*****************************************************************************************')
-        print(payload)
         username: str = payload.get("sub")
-        
         if username is None:
             raise credentials_exception
+
+        # Check blacklist token
+        black_list_token = await crud.find_black_list_token(token)
+        if black_list_token:
+            raise credentials_exception
         
-        #Checks user existance
+        # Check user existance
         result = await crud.find_exist_user(username)
         if not result:
             raise HTTPException(status_code=404, detail="User not found.")

@@ -50,8 +50,6 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
         data = {"sub": form_data.username},
         expires_delta=access_token_expires
     )
-    print('****************************************************************')
-    print(access_token)
     return {
         "access_token": access_token,
         "token_type": "Bearer",
@@ -85,7 +83,7 @@ async def forgot_password(request: schema.ForgotPassword):
         <p>Here is the link to reset your password: </p>
         <a href="http://127.0.0.1:8000/user/forgot-password?reset_password_token={reset_code}">Reset my password</a>
     """
-
+    
     await email_util.send_email(subject, recepient, message)
 
     return {"message": "Password reset code was sent. Check your email"}

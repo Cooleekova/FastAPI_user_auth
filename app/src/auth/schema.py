@@ -1,3 +1,4 @@
+from lib2to3.pgen2.token import OP
 from pydantic import BaseModel, Field
 from typing import Optional
 from datetime import datetime
@@ -17,8 +18,7 @@ class UserCreate(UserList):
 
 class ForgotPassword(BaseModel):
     email: str = Field(..., example="example@example.com")
-
-
+   
 class ResetPassword(BaseModel):
     reset_password_token: str
     new_password: str

@@ -14,6 +14,8 @@ users = Table(
     Column("status", String(1)),
 )
 
+ # Column("id", Integer, Sequence("user_id_seq"), primary_key=True),
+
 
 codes = Table(
     "codes", metadata,
@@ -24,6 +26,11 @@ codes = Table(
     Column("expired_in", DateTime)
 )
 
- # Column("id", Integer, Sequence("user_id_seq"), primary_key=True),
+
+blacklists = Table(
+    "blacklist", metadata,
+    Column("token", String(250), unique=True),
+    Column("email", String(50)),
+)
 
     
