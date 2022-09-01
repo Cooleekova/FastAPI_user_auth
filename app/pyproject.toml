@@ -17,6 +17,7 @@ passlib = "^1.7.4"
 PyJWT = "^2.4.0"
 python-multipart = "^0.0.5"
 fastapi-mail = "^1.1.4"
+Pillow = "^9.2.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
