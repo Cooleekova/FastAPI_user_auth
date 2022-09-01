@@ -33,4 +33,23 @@ blacklists = Table(
     Column("email", String(50)),
 )
 
-    
+
+otps = Table(
+    "otps", metadata,
+    Column("id", Integer, primary_key=True),
+    Column("recipient_id", String(100)),
+    Column("session_id", String(100)),
+    Column("ootp_code", String(6)),
+    Column("status", String(1)),
+    Column("created_on", DateTime),
+    Column("updated_on", DateTime),
+    Column("otp_failed_count", Integer, default=0),
+)
+
+
+otp_blocks = Table(
+    "otp_blocks", metadata,
+    Column("id", Integer, primary_key=True),
+    Column("created_on", DateTime),
+)
+

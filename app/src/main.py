@@ -3,6 +3,7 @@ from fastapi.responses import JSONResponse
 from starlette.middleware.cors import CORSMiddleware
 from auth import router as auth_router
 from users import router as user_router
+from otps import router as otp_router
 from exceptions.business import BusinessException
 
 
@@ -60,3 +61,4 @@ async def business_exception_handler(request: Request, exc: BusinessException):
 
 app.include_router(auth_router.router, tags = ["Auth"])
 app.include_router(user_router.router, tags = ["Users"])
+app.include_router(otp_router.router, tags = ["OTPs"])
