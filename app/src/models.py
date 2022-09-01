@@ -39,7 +39,7 @@ otps = Table(
     Column("id", Integer, primary_key=True),
     Column("recipient_id", String(100)),
     Column("session_id", String(100)),
-    Column("ootp_code", String(6)),
+    Column("otp_code", String(6)),
     Column("status", String(1)),
     Column("created_on", DateTime),
     Column("updated_on", DateTime),
@@ -50,6 +50,7 @@ otps = Table(
 otp_blocks = Table(
     "otp_blocks", metadata,
     Column("id", Integer, primary_key=True),
+     Column("recipient_id", String(100)),
     Column("created_on", DateTime),
 )
 
