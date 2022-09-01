@@ -5,6 +5,7 @@ from utils import jwt_util, crypto_util
 
 from exceptions.business import BusinessException
 import os
+from PIL import Image
 
 
 router = APIRouter(
@@ -87,7 +88,7 @@ async def logout(
     }
 
 
-@router.post("/user/upload-profile-image")
+@router.post("/user/profile-image")
 async def upload_profile_image(
     file: UploadFile = File(...),
     current_user: auth_schema.UserList = Depends(jwt_util.get_current_active_user)
@@ -111,4 +112,24 @@ async def upload_profile_image(
 
     return {
         "profile_image": os.path.join(path_image_dir, "profile.png")
+    }
+
+
+
+@router.get("/user/profile-image")
+async def get_profile_image(
+    current_user: auth_schema.UserList = Depends(jwt_util.get_current_active_user)
+):
+    cwd = os.getcwd()
+    path_image_dir = "upload_images/user/profile/" + str(current_user.id) + "/"
+    full_image_path = os.path.join(cwd, path_image_dir, "profile.png")
+
+    # Check if the directory exists and resize profile picture with Pillow library
+    if os.path.exists(full_image_path):
+        with Image.open(full_image_path) as im:
+            im.thumbnail((400, 400), Image.ANTIALIAS)
+            im.save(path_image_dir + "profile_400x400.png")
+
+    return {
+        "profile_image": os.path.join(path_image_dir, "profile_400x400.png")
     }
