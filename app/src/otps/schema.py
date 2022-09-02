@@ -5,7 +5,7 @@ class CreateOTP(BaseModel):
     recipient_id: str
 
 
-class VerifyOTP(BaseModel):
+class VerifyOTP(CreateOTP):
     session_id: str
     otp_code: str
 
