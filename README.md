@@ -2,7 +2,7 @@
 
 Information about registered users is stored in the database. 
 
-**Implemented endpoints:**
+**Implemented endpoints**
 
 *for everyone:*
 - register a new user
@@ -22,10 +22,10 @@ Information about registered users is stored in the database.
 - get profile image
 
 
-#### Technologies:
+#### Technologies
 Python, FastAPI, SQLAlchemy, PostgreSQL
 
-#### Instructions:
+#### Instructions
 to run project locally: 
 
 `uvicorn main:app --host "0.0.0.0" --port 8000 --reload`
