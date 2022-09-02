@@ -2,10 +2,25 @@
 
 Information about registered users is stored in the database. 
 
-Implemented endpoints: 
-- register a new user, 
-- login user,
+**Implemented endpoints:**
+
+*for everyone:*
+- register a new user
+
+*for registered users:*
+- login user with JWT token,
 - forgot password, 
 - reset password
 
-#### Used technologies: Python, FastAPI, SQLAlchemy, PostgreSQL, Docker
+*for authenticated users only:*
+- get user profile info,
+- update user profile info,
+- deactivate account,
+- change password,
+- logout,
+- upload profile image,
+- get profile image
+
+
+#### Technologies:
+Python, FastAPI, SQLAlchemy, PostgreSQL
