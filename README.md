@@ -24,3 +24,8 @@ Information about registered users is stored in the database.
 
 #### Technologies:
 Python, FastAPI, SQLAlchemy, PostgreSQL
+
+#### Instructions:
+to run project locally: 
+
+`uvicorn main:app --host "0.0.0.0" --port 8000 --reload`
